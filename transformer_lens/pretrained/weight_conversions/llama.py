@@ -2,6 +2,7 @@ from typing import cast
 
 import einops
 import torch
+import gc    
 
 from transformer_lens.HookedTransformerConfig import HookedTransformerConfig
 
@@ -10,7 +11,9 @@ def convert_llama_weights(llama, cfg: HookedTransformerConfig):
     state_dict = {}
 
     state_dict["embed.W_E"] = llama.model.embed_tokens.weight
-
+    state_dict["ln_final.w"] = llama.model.norm.weight
+    state_dict["unembed.W_U"] = llama.lm_head.weight.T
+    state_dict["unembed.b_U"] = torch.zeros(cfg.d_vocab, dtype=cfg.dtype, device=cfg.device)
     # Some models with the Llama architecture use Grouped Query Attention, and so for these we need to modify
     # the state dict keys for the K/V attention weight/biases, prepending "_" to the key names.
     using_gqa = cfg.n_key_value_heads is not None
@@ -87,10 +90,11 @@ def convert_llama_weights(llama, cfg: HookedTransformerConfig):
         state_dict[f"blocks.{l}.mlp.b_out"] = torch.zeros(
             cfg.d_model, dtype=cfg.dtype, device=cfg.device
         )
+        del llama.model.layers[l]
+        gc.collect()
 
-    state_dict["ln_final.w"] = llama.model.norm.weight
-
-    state_dict["unembed.W_U"] = llama.lm_head.weight.T
-    state_dict["unembed.b_U"] = torch.zeros(cfg.d_vocab, dtype=cfg.dtype, device=cfg.device)
+    # state_dict["ln_final.w"] = llama.model.norm.weight
+    # state_dict["unembed.W_U"] = llama.lm_head.weight.T
+    # state_dict["unembed.b_U"] = torch.zeros(cfg.d_vocab, dtype=cfg.dtype, device=cfg.device)
 
     return state_dict
