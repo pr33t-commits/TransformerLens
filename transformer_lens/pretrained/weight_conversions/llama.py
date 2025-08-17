@@ -29,6 +29,7 @@ def convert_llama_weights(llama, cfg: HookedTransformerConfig):
         print(f"Number of hidden layers :- {llama.config.num_hidden_layers}")
     for l in range(cfg.n_layers):
         print(f'Layer :- {l}')
+        l=0
         state_dict[f"blocks.{l}.ln1.w"] = llama.model.layers[l].input_layernorm.weight
 
         W_Q = llama.model.layers[l].self_attn.q_proj.weight
