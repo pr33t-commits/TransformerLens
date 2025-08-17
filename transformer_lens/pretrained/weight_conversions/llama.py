@@ -25,10 +25,7 @@ def convert_llama_weights(llama, cfg: HookedTransformerConfig):
     # GPTNeoX with different names
 
     assert cfg.d_mlp is not None  # keep mypy happy
-    if hasattr(llama.config, "num_hidden_layers"):
-        print(f"Number of hidden layers :- {llama.config.num_hidden_layers}")
     for l in range(cfg.n_layers):
-        print(f'Layer :- {l}')
         layer_idx = l
         l = 0
         state_dict[f"blocks.{l}.ln1.w"] = llama.model.layers[l].input_layernorm.weight
