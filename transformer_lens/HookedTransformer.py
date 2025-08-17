@@ -1375,7 +1375,7 @@ class HookedTransformer(HookedRootModule):
         model = cls(
             cfg,
             tokenizer,
-            move_to_device = True,#False,
+            move_to_device = False,#False,
             default_padding_side=default_padding_side,
         )
         print('HookedTransformer object initiated') ## PRINT COMMAND TO BE DELETED
@@ -1388,7 +1388,8 @@ class HookedTransformer(HookedRootModule):
             fold_value_biases=fold_value_biases,
             refactor_factored_attn_matrices=refactor_factored_attn_matrices,
         )
-        print('HT object loaded')
+        print('HT object loaded in CPU')
+        del state_dict
         if move_to_device:
             model.move_model_modules_to_device()
     
