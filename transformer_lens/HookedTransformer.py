@@ -1375,7 +1375,7 @@ class HookedTransformer(HookedRootModule):
         model = cls(
             cfg,
             tokenizer,
-            move_to_device=False,
+            move_to_device= True,#False,
             default_padding_side=default_padding_side,
         )
         print('HookedTransformer object initiated') ## PRINT COMMAND TO BE DELETED
