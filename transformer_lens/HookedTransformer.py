@@ -1370,6 +1370,7 @@ class HookedTransformer(HookedRootModule):
         state_dict = loading.get_pretrained_state_dict(
             official_model_name, cfg, hf_model, dtype=dtype, **from_pretrained_kwargs
         )
+        del hf_model
         print('State dict loaded') ## PRINT COMMAND TO BE DELETED
         # Create the HookedTransformer object
         model = cls(
