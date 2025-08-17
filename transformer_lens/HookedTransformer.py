@@ -1646,6 +1646,7 @@ class HookedTransformer(HookedRootModule):
         else:
             state_dict_keys = list(state_dict.keys())
             for key in state_dict_keys:
+                print(key) ## PRINT COMMAND TO BE DELETED
                 self.load_state_dict({key: state_dict[key]}, strict=False)
                 del state_dict[key]
 
