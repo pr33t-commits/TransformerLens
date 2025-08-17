@@ -1370,7 +1370,7 @@ class HookedTransformer(HookedRootModule):
         state_dict = loading.get_pretrained_state_dict(
             official_model_name, cfg, hf_model, dtype=dtype, **from_pretrained_kwargs
         )
-
+        print('State dict loaded') ## PRINT COMMAND TO BE DELETED
         # Create the HookedTransformer object
         model = cls(
             cfg,
@@ -1378,7 +1378,8 @@ class HookedTransformer(HookedRootModule):
             move_to_device=False,
             default_padding_side=default_padding_side,
         )
-
+        print('HookedTransformer object initiated') ## PRINT COMMAND TO BE DELETED
+        print('Starting loading dict into the object')
         model.load_and_process_state_dict(
             state_dict,
             fold_ln=fold_ln,
@@ -1387,10 +1388,10 @@ class HookedTransformer(HookedRootModule):
             fold_value_biases=fold_value_biases,
             refactor_factored_attn_matrices=refactor_factored_attn_matrices,
         )
-
+        print('HT object loaded')
         if move_to_device:
             model.move_model_modules_to_device()
-
+    
         print(f"Loaded pretrained model {model_name} into HookedTransformer")
 
         return model
